@@ -1,0 +1,7 @@
+= twitterdispatch
+
+Description goes here.
+
+== Copyright
+
+Copyright (c) 2009 Michael Bleigh. See LICENSE for details.
