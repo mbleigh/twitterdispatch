@@ -95,12 +95,31 @@ module TwitterDispatch
       end     
     end
 
-    %w(get put delete post request).each do |meth|
-      class_eval <<-RUBY
-        def #{meth}(*args)
-          proxy.#{meth}(*args)
-        end
-      RUBY
+    # Make a request through the dispatcher. Method
+    # can be any of the standard HTTP verbs, path
+    # is the API path such as <tt>/account/verify_credentials.json</tt>
+    def request(http_method, path, *args)
+      proxy.request(http_method, path, *args)
+    end
+
+    # Perform a GET request through the dispatcher.
+    def get(*args)
+      proxy.get(*args)
+    end
+
+    # Perform a POST request through the dispatcher.
+    def post(*args)
+      proxy.post(*args)
+    end
+
+    # Perform a PUT request through the dispatcher.
+    def put(*args)
+      proxy.put(*args)
+    end
+
+    # Perform a DELETE request through the dispatcher.
+    def delete(*args)
+      proxy.delete(*args)
     end
   end
 end
