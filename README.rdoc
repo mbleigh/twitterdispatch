@@ -1,7 +1,37 @@
-= twitterdispatch
+= TwitterDispatch 
 
-Description goes here.
+TwitterDispatch is an unassuming API wrapper for Twitter based on the dispatcher from TwitterAuth. Rather than create a complex object mapping system around the simple REST API Twitter provides, TwitterDispatch simply gives you the tools to make calls directly to the API URLs and parse the results (or not).
+
+TwitterDispatch supports both OAuth and HTTP Basic authentication strategies.
+
+== Usage
+
+To use TwitterDispatch you will need different things depending on the strategy you are using:
+
+* <b>OAuth</b> - You will need to have already registered your application with Twitter (have a consumer key and secret) as well as performed the entire OAuth authentication process (have an access key and secret). If you don't know much about OAuth and are building a Rails application, I would suggest using TwitterAuth instead.
+* <b>HTTP Basic</b> - You will need to have the screen name and password for the authenticating user.
+
+Usage of TwitterDispatch is straightforward. Here are some basic examples to get you going.
+
+    # OAuth Example
+    dispatcher = TwitterDispatch.new(:oauth, 'myconsumerkey', 'myconsumersecret', 'myaccesskey', 'myaccesssecret')
+    dispatcher.get('/account/verify_credentials') # => {'screen_name' => ...}
+    dispatcher.post('/statuses/update', :status => 'Update my status.') # => {'text' => 'Update my status.' ... }
+
+    # HTTP Basic Example
+    dispatcher = TwitterDispatch.new(:basic, 'screenname', 'password')
+    dispatcher.get('/statuses/friends_timeline') # => [{'text' => ...}]
+
+    # No Auth Example
+    dispatcher = TwitterDispatch.new
+    dispatcher.get('/statuses/public_timeline') # => [{'text' => ...}]
+
+    # Search Example
+    dispatcher = TwitterDispatch.new
+    dispatcher.search('query text') # => [{'text' => ...}]
+
+TwitterDispatch is not meant to be complex or assuming, it literally just does the bare minimum to provide you with a simple and direct access to the Twitter API in Ruby.
 
 == Copyright
 
-Copyright (c) 2009 Michael Bleigh. See LICENSE for details.
+Copyright (c) 2009 Michael Bleigh and Intridea, Inc. See LICENSE for details.
