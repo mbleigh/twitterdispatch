@@ -5,11 +5,11 @@ begin
   require 'jeweler'
   Jeweler::Tasks.new do |gem|
     gem.name = "twitterdispatch"
-    gem.summary = %Q{TODO}
+    gem.summary = "A simple Twitter API wrapper that gets out of your way and lets you access things directly." 
     gem.email = "michael@intridea.com"
     gem.homepage = "http://github.com/mbleigh/twitterdispatch"
     gem.authors = ["Michael Bleigh"]
-
+    gem.rubyforge_project = 'twitterdispatch'
     # gem is a Gem::Specification... see http://www.rubygems.org/read/chapter/20 for additional settings
   end
 rescue LoadError
