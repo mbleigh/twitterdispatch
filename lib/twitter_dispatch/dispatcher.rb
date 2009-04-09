@@ -29,8 +29,12 @@ module TwitterDispatch
       @strategy = strategy
       case @strategy
       when :oauth
-        raise ArgumentError, "The :oauth strategy requires four arguments - consumer_key, consumer_secret, access_key and access_secret." unless args.size == 5
-        @consumer_key, @consumer_secret, @access_key, @access_secret, @options = *args
+        raise ArgumentError, "The :oauth strategy requires two or four arguments - consumer_key, consumer_secret, access_key and access_secret." unless [3,5].include?(args.size)
+        if args.size == 5
+          @consumer_key, @consumer_secret, @access_key, @access_secret, @options = *args
+        else
+          @consumer_key, @consumer_secret, @options = *args
+        end
       when :basic
         raise ArgumentError, "The :basic strategy requires two arguments - screen_name and password." unless args.size == 3
         @screen_name, @password, @options = *args

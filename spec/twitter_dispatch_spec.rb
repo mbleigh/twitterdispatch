@@ -6,32 +6,38 @@ describe TwitterDispatch do
       lambda{TwitterDispatch.new(:bollocks)}.should raise_error(ArgumentError)  
     end
 
-    { :oauth => 4,
-      :basic => 2,
-      :none => 0 }.each_pair do |strategy, count|
+    { :oauth => [2,4],
+      :basic => [2],
+      :none => [0] }.each_pair do |strategy, counts|
       it "should raise an ArgumentError with the wrong number of args for #{strategy.inspect}" do
-        (0...count).each do |arg_count|
+        (0...counts.max).each do |arg_count|
           myargs = ['abc'] * arg_count
-          lambda{TwitterDispatch.new(strategy, *myargs)}.should raise_error(ArgumentError)
-          myargs << {:base_url => 'http://example.com'}
-          lambda{TwitterDispatch.new(strategy, *myargs)}.should raise_error(ArgumentError)
+          unless counts.include?(arg_count)
+            lambda{TwitterDispatch.new(strategy, *myargs)}.should raise_error(ArgumentError)
+            myargs << {:base_url => 'http://example.com'}
+            lambda{TwitterDispatch.new(strategy, *myargs)}.should raise_error(ArgumentError)
+          end
         end
       end
 
       it "should not raise an ArgumentError with the correct number of arguments for #{strategy.inspect}" do
-        myargs = ['abc'] * count
-        lambda{TwitterDispatch.new(strategy, *myargs)}.should_not raise_error(ArgumentError)
-        myargs << {:base_url => 'http://example.com'}
-        lambda{TwitterDispatch.new(strategy, *myargs)}.should_not raise_error(ArgumentError)
+        counts.each do |count|
+          myargs = ['abc'] * count
+          lambda{TwitterDispatch.new(strategy, *myargs)}.should_not raise_error(ArgumentError)
+          myargs << {:base_url => 'http://example.com'}
+          lambda{TwitterDispatch.new(strategy, *myargs)}.should_not raise_error(ArgumentError)
+        end
       end
 
       unless strategy == :none
         it "should set the strategy appropriately" do
-          myargs = ['abc'] * count
-          @dispatch = TwitterDispatch.new(strategy, *myargs)
-          @dispatch.strategy.should == strategy
-          @dispatch.should be_strategy
-          @dispatch.send("#{strategy}?").should be_true
+          counts.each do |count|
+            myargs = ['abc'] * count
+            @dispatch = TwitterDispatch.new(strategy, *myargs)
+            @dispatch.strategy.should == strategy
+            @dispatch.should be_strategy
+            @dispatch.send("#{strategy}?").should be_true
+          end
         end
       end
     end
